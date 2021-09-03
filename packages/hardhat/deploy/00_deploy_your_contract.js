@@ -5,10 +5,34 @@
 module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
+  await deploy("Love", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    value: ethers.utils.parseEther("0.00000000001"),
+    //args: [ "Hello", ethers.utils.parseEther("1.5") ],
+    log: true,
+  });
+
+  await deploy("Angry", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    value: ethers.utils.parseEther("0.00000000001"),
+    //args: [ "Hello", ethers.utils.parseEther("1.5") ],
+    log: true,
+  });
+
   await deploy("Smile", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    value: ethers.utils.parseEther("0.0001"),
+    value: ethers.utils.parseEther("0.00000000001"),
+    //args: [ "Hello", ethers.utils.parseEther("1.5") ],
+    log: true,
+  });
+
+  await deploy("Laugh", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    value: ethers.utils.parseEther("0.00000000001"),
     //args: [ "Hello", ethers.utils.parseEther("1.5") ],
     log: true,
   });
