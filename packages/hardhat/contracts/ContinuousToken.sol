@@ -37,6 +37,10 @@ abstract contract ContinuousToken is Ownable, ERC20, BancorBondingCurve {
         return rewardAmount;
     }
 
+    function getQuantity() internal view returns(uint) {
+        return getContinuousMintReward(1 ether);
+    }
+
     function _continuousBurn(uint _amount) internal returns (uint) {
         require(_amount > 0, "Amount must be non-zero.");
         require(balanceOf(msg.sender) >= _amount, "Insufficient tokens to burn.");
