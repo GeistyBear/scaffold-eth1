@@ -85,4 +85,4 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   });
   */
 };
-module.exports.tags = ["Smile"];
+module.exports.tags = ["Smile", "Laugh", "Angry", "Cool", "Sad", "Love"];
