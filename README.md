@@ -1,96 +1,202 @@
-# 🏗 Scaffold-ETH
+# 🏗 scaffold-eth - 📈 Bonding Curve Emoji Feast 😃😡😎🤣❤️😔
 
-> everything you need to build on Ethereum! 🚀
+> Bonding Curve Gamification of sorts by setting up 6 different emojis's on same type of bonding curves
 
-🧪 Quickly experiment with Solidity using a frontend that adapts to your smart contract:
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a>About The Branch</a>
+    </li>
+    <li>
+      <a>Getting Started</a>
+      <ul>
+        <li><a>Installation</a></li>
+        <li><a>Introduction</a></li>
+        <li><a>To-Do</a></li>
+      </ul>
+    </li>
+    <li><a>Branch UI Walkthrough</a></li>
+    <li><a>Contact</a></li>
+  </ol>
+</details>
 
-![image](https://user-images.githubusercontent.com/2653167/124158108-c14ca380-da56-11eb-967e-69cde37ca8eb.png)
+## About The Branch
+
+This branch is entitled to showcase a particular usecase of [Bonding Curve](https://yos.io/2018/11/10/bonding-curves/) which makes use of the [Bancor's Bonding Curve Formula](https://yos.io/2018/11/10/bonding-curves/#mathematical-formula) & it is a upgraded version of this [branch](https://github.com/scaffold-eth/scaffold-eth/tree/bonding-curve)
 
 
-# 🏄‍♂️ Quick Start
+## Getting Started
 
-Prerequisites: [Node](https://nodejs.org/en/download/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
 
-> clone/fork 🏗 scaffold-eth:
+### Installation
 
-```bash
-git clone https://github.com/austintgriffith/scaffold-eth.git
+Let's start our environment for tinkering and exploring how NFT auction would work.
+
+1. Clone the repo first
+```sh
+git clone -b bonding-curve-emoji-feast https://github.com/austintgriffith/scaffold-eth.git bonding-curve-emoji-feast
+cd bonding-curve-emoji-feast
 ```
 
-> install and start your 👷‍ Hardhat chain:
-
+2. Install dependencies
 ```bash
-cd scaffold-eth
 yarn install
+```
+
+3. Spin up local chain
+```sh
 yarn chain
 ```
 
-> in a second terminal window, start your 📱 frontend:
-
-```bash
-cd scaffold-eth
-yarn start
-```
-
-> in a third terminal window, 🛰 deploy your contract:
-
-```bash
-cd scaffold-eth
+4. Deploy Contracts
+```sh
 yarn deploy
 ```
 
-🔏 Edit your smart contract `YourContract.sol` in `packages/hardhat/contracts`
+5. Start React frontend
+```bash
+yarn start
+```
 
-📝 Edit your frontend `App.jsx` in `packages/react-app/src`
+## Introduction
 
-💼 Edit your deployment scripts in `packages/hardhat/deploy`
+**To Dive deep on an introduction to bonding curves, please check out this [branch](https://github.com/scaffold-eth/scaffold-eth/tree/bonding-curve) as the emoji feast (current branch) assumes the users having a basic understanding of bonding curves and bancor bonding curves spefically**
 
-📱 Open http://localhost:3000 to see the app
+Basically the idea behind this branch is to gamify bonding curves by creating a price leaderboard for different emoji's, so more costly the emoji the higher it is ranked on the leaderboard.
 
-# 📚 Documentation
+The price is fetched from a smart contract method
+```
+function getPrice() external view returns (uint256)
+```
 
-Documentation, tutorials, challenges, and many more resources, visit: [docs.scaffoldeth.io](https://docs.scaffoldeth.io)
+which just returns the price of 1 ETH worth of the emoji token.
 
-# 🔭 Learning Solidity
+### Mechanism
 
-📕 Read the docs: https://docs.soliditylang.org
+During the deployment when the 6 emoji contract's get deployed there is small 0.0001 eth to set the reserve amount which is required as per the Bancor Formula and the reserve ratio which determines the price sensitivity is set to 30 % for all emoji's
 
-📚 Go through each topic from [solidity by example](https://solidity-by-example.org) editing `YourContract.sol` in **🏗 scaffold-eth**
+Further on as user lock in eth in a particular emoji token contract they wish to mint and the price increases with the supply and vice-versa if the user burns the token.
 
-- [Primitive Data Types](https://solidity-by-example.org/primitives/)
-- [Mappings](https://solidity-by-example.org/mapping/)
-- [Structs](https://solidity-by-example.org/structs/)
-- [Modifiers](https://solidity-by-example.org/function-modifier/)
-- [Events](https://solidity-by-example.org/events/)
-- [Inheritance](https://solidity-by-example.org/inheritance/)
-- [Payable](https://solidity-by-example.org/payable/)
-- [Fallback](https://solidity-by-example.org/fallback/)
+## To-Do
+- Beautufy the design, right now the ui code in terms of styling is pretty simple and un-appealing the aim is get the design right in terms of the factors mentioned above
 
-📧 Learn the [Solidity globals and units](https://solidity.readthedocs.io/en/v0.6.6/units-and-global-variables.html)
-
-# 🛠 Buidl
-
-Check out all the [active branches](https://github.com/austintgriffith/scaffold-eth/branches/active), [open issues](https://github.com/austintgriffith/scaffold-eth/issues), and join/fund the 🏰 [BuidlGuidl](https://BuidlGuidl.com)!
-
-  
- - 🚤  [Follow the full Ethereum Speed Run](https://medium.com/@austin_48503/%EF%B8%8Fethereum-dev-speed-run-bd72bcba6a4c)
+- React code for leaderboard, need to sort the [emojiQuoteArray](https://github.com/scaffold-eth/scaffold-eth/blob/bonding-curve-emoji-feast/packages/react-app/src/views/ExampleUI.jsx#L78) with each object having different keys.
 
 
- - 🎟  [Create your first NFT](https://github.com/austintgriffith/scaffold-eth/tree/simple-nft-example)
- - 🥩  [Build a staking smart contract](https://github.com/austintgriffith/scaffold-eth/tree/challenge-1-decentralized-staking)
- - 🏵  [Deploy a token and vendor](https://github.com/austintgriffith/scaffold-eth/tree/challenge-2-token-vendor)
- - 🎫  [Extend the NFT example to make a "buyer mints" marketplace](https://github.com/austintgriffith/scaffold-eth/tree/buyer-mints-nft)
- - 🎲  [Learn about commit/reveal](https://github.com/austintgriffith/scaffold-eth/tree/commit-reveal-with-frontend)
- - ✍️  [Learn how ecrecover works](https://github.com/austintgriffith/scaffold-eth/tree/signature-recover)
- - 👩‍👩‍👧‍👧  [Build a multi-sig that uses off-chain signatures](https://github.com/austintgriffith/scaffold-eth/tree/meta-multi-sig)
- - ⏳  [Extend the multi-sig to stream ETH](https://github.com/austintgriffith/scaffold-eth/tree/streaming-meta-multi-sig)
- - ⚖️  [Learn how a simple DEX works](https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90)
- - 🦍  [Ape into learning!](https://github.com/austintgriffith/scaffold-eth/tree/aave-ape)
 
-# 💬 Support Chat
 
-Join the telegram [support chat 💬](https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA) to ask questions and find others building with 🏗 scaffold-eth!
+## Branch UI Walkthrough
 
----
+Firstly, get us some funds using local faucet.
 
-🙏 Please check out our [Gitcoin grant](https://gitcoin.co/grants/2851/scaffold-eth) too!
+<img width="458" alt="feast 1" src="https://user-images.githubusercontent.com/26670962/132893454-5775c6b4-ad87-46c9-af92-d4b7f9541355.png">
+
+
+Mint & Burn Different Emoji's
+
+
+## Contact
+
+Join the [telegram support chat 💬](https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA) to ask questions and find others building with 🏗 scaffold-eth!
+# 🏗 scaffold-eth - 📈 Bonding Curve Emoji Feast 😃😡😎🤣❤️😔
+
+> Bonding Curve Gamification of sorts by setting up 6 different emojis's on same type of bonding curves
+
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a>About The Branch</a>
+    </li>
+    <li>
+      <a>Getting Started</a>
+      <ul>
+        <li><a>Installation</a></li>
+        <li><a>Introduction</a></li>
+        <li><a>To-Do</a></li>
+      </ul>
+    </li>
+    <li><a>Branch UI Walkthrough</a></li>
+    <li><a>Contact</a></li>
+  </ol>
+</details>
+
+## About The Branch
+
+This branch is entitled to showcase a particular usecase of [Bonding Curve](https://yos.io/2018/11/10/bonding-curves/) which makes use of the [Bancor's Bonding Curve Formula](https://yos.io/2018/11/10/bonding-curves/#mathematical-formula) & it is a upgraded version of this [branch](https://github.com/scaffold-eth/scaffold-eth/tree/bonding-curve)
+
+
+## Getting Started
+
+
+### Installation
+
+Let's start our environment for tinkering and exploring how NFT auction would work.
+
+1. Clone the repo first
+```sh
+git clone -b bonding-curve-emoji-feast https://github.com/austintgriffith/scaffold-eth.git bonding-curve-emoji-feast
+cd bonding-curve-emoji-feast
+```
+
+2. Install dependencies
+```bash
+yarn install
+```
+
+3. Spin up local chain
+```sh
+yarn chain
+```
+
+4. Deploy Contracts
+```sh
+yarn deploy
+```
+
+5. Start React frontend
+```bash
+yarn start
+```
+
+## Introduction
+
+**To Dive deep on an introduction to bonding curves, please check out this [branch](https://github.com/scaffold-eth/scaffold-eth/tree/bonding-curve) as the emoji feast (current branch) assumes the users having a basic understanding of bonding curves and bancor bonding curves spefically**
+
+Basically the idea behind this branch is to gamify bonding curves by creating a price leaderboard for different emoji's, so more costly the emoji the higher it is ranked on the leaderboard.
+
+The price is fetched from a smart contract method
+```
+function getPrice() external view returns (uint256)
+```
+
+which just returns the price of 1 ETH worth of the emoji token.
+
+### Mechanism
+
+During the deployment when the 6 emoji contract's get deployed there is small 0.0001 eth to set the reserve amount which is required as per the Bancor Formula and the reserve ratio which determines the price sensitivity is set to 30 % for all emoji's
+
+Further on as user lock in eth in a particular emoji token contract they wish to mint and the price increases with the supply and vice-versa if the user burns the token.
+
+## To-Do
+- Beautufy the design, right now the ui code in terms of styling is pretty simple and un-appealing the aim is get the design right in terms of the factors mentioned above
+
+- React code for leaderboard, need to sort the [emojiQuoteArray](https://github.com/scaffold-eth/scaffold-eth/blob/bonding-curve-emoji-feast/packages/react-app/src/views/ExampleUI.jsx#L78) with each object having different keys.
+
+
+
+
+## Branch UI Walkthrough
+
+Firstly, get us some funds using local faucet.
+
+<img width="458" alt="feast 1" src="https://user-images.githubusercontent.com/26670962/132893454-5775c6b4-ad87-46c9-af92-d4b7f9541355.png">
+
+
+Mint & Burn Different Emoji's
+
+
+## Contact
+
+Join the [telegram support chat 💬](https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA) to ask questions and find others building with 🏗 scaffold-eth!
