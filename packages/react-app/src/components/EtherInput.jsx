@@ -66,7 +66,7 @@ export default function EtherInput(props) {
     prefix = "$";
     addonAfter = option("USD 🔀");
   } else {
-    prefix = "Ξ";
+    prefix = "⚔️";
     addonAfter = option("ETH 🔀");
   }
 

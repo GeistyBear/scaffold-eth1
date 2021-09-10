@@ -798,4 +798,12 @@ module.exports = {
       },
     },
   },
+  100: {
+    contracts: {
+      RAID: {
+        address: "0x18E9262e68Cc6c6004dB93105cc7c001BB103e49",
+        abi: ERC20ABI
+      }
+    },
+  }
 };

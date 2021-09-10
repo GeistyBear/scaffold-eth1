@@ -58,19 +58,24 @@ export default function AddressInput(props) {
     async newValue => {
       if (typeof newValue !== "undefined") {
         let address = newValue;
+        setValue(address);
+        if (typeof onChange === "function") {
+          onChange(address);
+        }
         if (address.indexOf(".eth") > 0 || address.indexOf(".xyz") > 0) {
           try {
             const possibleAddress = await ensProvider.resolveName(address);
             if (possibleAddress) {
               address = possibleAddress;
+              setValue(address);
+              if (typeof onChange === "function") {
+                onChange(address);
+              }
             }
             // eslint-disable-next-line no-empty
           } catch (e) { }
         }
-        setValue(address);
-        if (typeof onChange === "function") {
-          onChange(address);
-        }
+
       }
     },
     [ensProvider, onChange],

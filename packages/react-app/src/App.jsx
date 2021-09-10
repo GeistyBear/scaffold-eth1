@@ -1,4 +1,5 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import { CaretUpOutlined, ScanOutlined, SendOutlined } from "@ant-design/icons";
 //import Torus from "@toruslabs/torus-embed"
 import WalletLink from "walletlink";
 import { Alert, Button, Col, Menu, Row } from "antd";
@@ -7,7 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
-import { Account, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
+import { AddressInput, EtherInput, Balance, Account, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
@@ -27,7 +28,7 @@ import {
 // import Hints from "./Hints";
 import { ExampleUI, Hints, Subgraph } from "./views";
 
-import { useContractConfig } from "./hooks"
+import { useContractConfig, useLocalStorage } from "./hooks"
 import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
 import Authereum from "authereum";
@@ -53,7 +54,7 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS.xdai; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -235,21 +236,23 @@ function App(props) {
   // If you want to bring in the mainnet DAI contract it would look like:
   const mainnetContracts = useContractLoader(mainnetProvider, contractConfig);
 
+  console.log("readContracts",readContracts)
+
   // If you want to call a function on a new block
   useOnBlock(mainnetProvider, () => {
     console.log(`⛓ A new mainnet block is here: ${mainnetProvider._lastBlockNumber}`);
   });
 
   // Then read your DAI balance like:
-  const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
-    "0x34aA3F359A9D614239015126635CE7732c18fDF3",
-  ]);
+  ///We const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
+  //  "0x34aA3F359A9D614239015126635CE7732c18fDF3",
+  //]);
 
   // keep track of a variable from the contract in the local React state:
-  const purpose = useContractReader(readContracts, "YourContract", "purpose");
+  const raidBalance = useContractReader(readContracts, "RAID", "balanceOf", [ address ]);
 
   // 📟 Listen for broadcast events
-  const setPurposeEvents = useEventListener(readContracts, "YourContract", "SetPurpose", localProvider, 1);
+  //const setPurposeEvents = useEventListener(readContracts, "YourContract", "SetPurpose", localProvider, 1);
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
@@ -280,7 +283,7 @@ function App(props) {
       console.log("💵 yourMainnetBalance", yourMainnetBalance ? ethers.utils.formatEther(yourMainnetBalance) : "...");
       console.log("📝 readContracts", readContracts);
       console.log("🌍 DAI contract on mainnet:", mainnetContracts);
-      console.log("💵 yourMainnetDAIBalance", myMainnetDAIBalance);
+      //console.log("💵 yourMainnetDAIBalance", myMainnetDAIBalance);
       console.log("🔐 writeContracts", writeContracts);
     }
   }, [
@@ -291,7 +294,7 @@ function App(props) {
     yourMainnetBalance,
     readContracts,
     writeContracts,
-    mainnetContracts,
+    //mainnetContracts,
   ]);
 
   let networkDisplay = "";
@@ -443,13 +446,41 @@ function App(props) {
     );
   }
 
+  let startingAddress = "";
+  if (window.location.pathname) {
+    const incoming = window.location.pathname.replace("/", "");
+    if (incoming && ethers.utils.isAddress(incoming)) {
+      startingAddress = incoming;
+      window.history.pushState({}, "", "/");
+    }
+
+    /* let rawPK
+    if(incomingPK.length===64||incomingPK.length===66){
+      console.log("🔑 Incoming Private Key...");
+      rawPK=incomingPK
+      burnerConfig.privateKey = rawPK
+      window.history.pushState({},"", "/");
+      let currentPrivateKey = window.localStorage.getItem("metaPrivateKey");
+      if(currentPrivateKey && currentPrivateKey!==rawPK){
+        window.localStorage.setItem("metaPrivateKey_backup"+Date.now(),currentPrivateKey);
+      }
+      window.localStorage.setItem("metaPrivateKey",rawPK);
+    } */
+  }
+
+  const [amount, setAmount] = useState();
+  const [toAddress, setToAddress] = useLocalStorage("punkWalletToAddress", startingAddress);
+
+  const [loading, setLoading] = useState(false);
+
+
   return (
     <div className="App">
       {/* ✏️ Edit the header and change the title to your project name */}
       <Header />
       {networkDisplay}
       <BrowserRouter>
-        <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
+        {/*<Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
           <Menu.Item key="/">
             <Link
               onClick={() => {
@@ -500,7 +531,7 @@ function App(props) {
               Subgraph
             </Link>
           </Menu.Item>
-        </Menu>
+        </Menu>*/}
 
         <Switch>
           <Route exact path="/">
@@ -510,68 +541,79 @@ function App(props) {
                 and give you a form to interact with it locally
             */}
 
-            <Contract
-              name="YourContract"
-              signer={userSigner}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-              contractConfig={contractConfig}
-            />
+
+            <div style={{ position: "relative", width: 420, margin: "auto", textAlign: "center", marginTop: 32, fontSize:32 }}>
+
+            ⚔️ <Balance value={raidBalance} size={38}/> RAID
+            </div>
+
+
+            <div style={{ position: "relative", width: 320, margin: "auto", textAlign: "center", marginTop: 32 }}>
+              <div style={{ padding: 10 }}>
+                <AddressInput
+                  ensProvider={mainnetProvider}
+                  placeholder="to address"
+                  address={toAddress}
+                  onChange={setToAddress}
+                  hoistScanner={toggle => {
+                    scanner = toggle;
+                  }}
+                />
+              </div>
+              <div style={{ padding: 10 }}>
+                <EtherInput
+                  price={0}
+                  placeholder={"amount in RAID"}
+                  value={amount}
+                  onChange={value => {
+                    setAmount(value);
+                  }}
+                />
+              </div>
+              <div style={{ padding: 10 }}>
+                <Button
+                  key="submit"
+                  type="primary"
+                  disabled={loading || !amount || !toAddress}
+                  loading={loading}
+                  onClick={async () => {
+                    setLoading(true);
+
+                    let value;
+                    try {
+                      value = ethers.utils.parseEther("" + amount);
+                    } catch (e) {
+                      const floatVal = parseFloat(amount).toFixed(8);
+                      // failed to parseEther, try something else
+                      value = parseEther("" + floatVal);
+                    }
+
+                    /*let result = tx({
+                      to: toAddress,
+                      value,
+                      gasPrice,
+                      gasLimit: 21000,
+                    });*/
+                    let result = tx( writeContracts.RAID.transfer(toAddress, value, { gasPrice: 21001001001, gasLimit: 90000}));
+                    // setToAddress("")
+                    setAmount("");
+                    result = await result;
+                    console.log(result);
+                    setLoading(false);
+                  }}
+                >
+                  {loading || !amount || !toAddress ? <CaretUpOutlined /> : <SendOutlined style={{ color: "#FFFFFF" }} />}{" "}
+                  Send
+                </Button>
+              </div>
+            </div>
+
+
+
+
+
           </Route>
-          <Route path="/hints">
-            <Hints
-              address={address}
-              yourLocalBalance={yourLocalBalance}
-              mainnetProvider={mainnetProvider}
-              price={price}
-            />
-          </Route>
-          <Route path="/exampleui">
-            <ExampleUI
-              address={address}
-              userSigner={userSigner}
-              mainnetProvider={mainnetProvider}
-              localProvider={localProvider}
-              yourLocalBalance={yourLocalBalance}
-              price={price}
-              tx={tx}
-              writeContracts={writeContracts}
-              readContracts={readContracts}
-              purpose={purpose}
-              setPurposeEvents={setPurposeEvents}
-            />
-          </Route>
-          <Route path="/mainnetdai">
-            <Contract
-              name="DAI"
-              customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.DAI}
-              signer={userSigner}
-              provider={mainnetProvider}
-              address={address}
-              blockExplorer="https://etherscan.io/"
-              contractConfig={contractConfig}
-              chainId={1}
-            />
-            {/*
-            <Contract
-              name="UNI"
-              customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.UNI}
-              signer={userSigner}
-              provider={mainnetProvider}
-              address={address}
-              blockExplorer="https://etherscan.io/"
-            />
-            */}
-          </Route>
-          <Route path="/subgraph">
-            <Subgraph
-              subgraphUri={props.subgraphUri}
-              tx={tx}
-              writeContracts={writeContracts}
-              mainnetProvider={mainnetProvider}
-            />
-          </Route>
+
         </Switch>
       </BrowserRouter>
 
