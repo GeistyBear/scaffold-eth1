@@ -1,5 +1,5 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { CaretUpOutlined, ScanOutlined, SendOutlined } from "@ant-design/icons";
+import { CaretUpOutlined, ReloadOutlined, ScanOutlined, SendOutlined } from "@ant-design/icons";
 //import Torus from "@toruslabs/torus-embed"
 import WalletLink from "walletlink";
 import { Alert, Button, Col, Menu, Row } from "antd";
@@ -555,12 +555,12 @@ function App(props) {
             */}
 
 
-            <div style={{ position: "relative", width: 420, margin: "auto", textAlign: "center", marginTop: 32, fontSize:32 }}>
+            <div style={{ position: "relative", color:"#ff3864", width: 420, margin: "auto", textAlign: "center", marginTop: 32, fontSize:32 }}>
               ⚔️ <Balance value={raidBalance} size={38}/> RAID
             </div>
 
             <div style={{ padding: 8, cursor: "pointer", backgroundColor: "#FFFFFF", width: 338, margin: "auto" }}>
-              <QRPunkBlockie withQr address={address} url={"https://raid.surge.sh/"} />
+              <QRPunkBlockie withQr address={address} url={"https://raid.cash/"} />
             </div>
 
             <div style={{ position: "relative", width: 320, margin: "auto", textAlign: "center", marginTop: 32 }}>
@@ -620,6 +620,13 @@ function App(props) {
                   {loading || !amount || !toAddress ? <CaretUpOutlined /> : <SendOutlined style={{ color: "#FFFFFF" }} />}{" "}
                   Send
                 </Button>
+              </div>
+
+
+              <div style={{color:"#ff3864",cursor:"pointer",paddingTop:64,paddingBottom:128}} onClick={()=>{
+                location.reload(true);
+              }}>
+                <ReloadOutlined style={{color:"#ff3864"}}/>
               </div>
             </div>
 
