@@ -9,15 +9,18 @@ const main = async () => {
 
   console.log("\n\n 📡 Deploying...\n");
 
+  const mockGtc = await deploy("MockGtc")
+
   const simpleStream = await deploy("SimpleStream",[
-    /* to address */ "0x34aA3F359A9D614239015126635CE7732c18fDF3",
+    /* to address */ "0x2DdA8dc2f67f1eB94b250CaEFAc9De16f70c5A51",
     /* cap */ utils.parseEther("0.5"),//ether
     /* frequency */120, //1296000,//seconds //1296000,//15 days
     /* starts full: */ false,
+    mockGtc.address
   ]/*,{nonce: 0}*/)
 
   // add some local funds to the stream with a little message:
-  await simpleStream.streamDeposit("Do some science, plz!",{value:ethers.utils.parseEther("2")})
+  // await simpleStream.streamDeposit("Do some science, plz!",{value:ethers.utils.parseEther("2")})
 
   //If you want to send value to an address from the deployer
   /*const deployerWallet = ethers.provider.getSigner()

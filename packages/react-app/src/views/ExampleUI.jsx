@@ -2,9 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { message, Row, Col, Button, List, Divider, Input, Card, DatePicker, Slider, Switch, Progress, Spin } from "antd";
-import { SyncOutlined } from '@ant-design/icons';
+import { ConsoleSqlOutlined, SyncOutlined } from '@ant-design/icons';
 import { QRPunkBlockie, QRBlockie, EtherInput, Address, Balance } from "../components";
 import { parseEther, formatEther } from "@ethersproject/units";
+import { GTC_ADDRESS, DAI_ABI } from "../constants";
+import { useExternalContractLoader } from '../hooks'
+
 import pretty from 'pretty-time';
 
 export default function ExampleUI({streamToAddress, streamfrequency, totalStreamBalance, streamCap, depositEvents, withdrawEvents, streamBalance, address, mainnetProvider, userProvider, localProvider, yourLocalBalance, price, tx, readContracts, writeContracts }) {
@@ -19,7 +22,9 @@ export default function ExampleUI({streamToAddress, streamfrequency, totalStream
   console.log("streamBalance",streamBalance)
   const percent = streamCap && streamBalance && (streamBalance.mul(100).div(streamCap)).toNumber()
 
-  console.log("percent",percent )
+  const mainnetGTCContract = useExternalContractLoader(mainnetProvider, GTC_ADDRESS, DAI_ABI)
+
+  console.log("percent",writeContracts )
 
   let streamNetPercentSeconds = totalStreamBalance && streamCap&& totalStreamBalance.mul(100).div(streamCap)
 
@@ -217,11 +222,17 @@ export default function ExampleUI({streamToAddress, streamfrequency, totalStream
           }}
         />
         <Button style={{marginTop:8}} onClick={()=>{
-          tx( writeContracts.SimpleStream.streamDeposit(depositReason,{
-            value: parseEther(""+depositAmount)
-          }) )
-          setDepositReason();
-          setDepositAmount();
+          // tx( writeContracts.mainnetGTCContract.transfer(writeContracts.SimpleStream.address, amount))
+          tx( writeContracts.MockGtc.transfer(writeContracts.SimpleStream.address,  parseEther(""+depositAmount)))
+          setTimeout(
+            () => {
+              console.log("second tx fired 15s later....")
+              tx( writeContracts.SimpleStream.streamDeposit(depositReason, parseEther(""+depositAmount)))
+            }, 15000
+          )
+            setDepositReason();
+            setDepositAmount();
+
         }}>Deposit</Button>
       </div>
 

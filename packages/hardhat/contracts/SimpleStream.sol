@@ -2,6 +2,7 @@ pragma solidity >=0.8.0;
 //SPDX-License-Identifier: MIT
 
 //import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract SimpleStream {
 
@@ -12,11 +13,13 @@ contract SimpleStream {
   uint256 public cap;// = 0.5 ether;
   uint256 public frequency;// 1296000 seconds == 2 weeks;
   uint256 public last;//stream starts empty (last = block.timestamp) or full (block.timestamp - frequency)
+  IERC20 public gtc;
 
-  constructor(address payable _toAddress, uint256 _cap, uint256 _frequency, bool _startsFull) public {
+  constructor(address payable _toAddress, uint256 _cap, uint256 _frequency, bool _startsFull, IERC20 _gtc) {
     toAddress = _toAddress;
     cap = _cap;
     frequency = _frequency;
+    gtc = _gtc;
     if(_startsFull){
       last = block.timestamp - frequency;
     }else{
@@ -31,7 +34,7 @@ contract SimpleStream {
     return (cap * (block.timestamp-last)) / frequency;
   }
 
-  function streamWithdraw(uint256 amount, string memory reason) public {
+  function streamWithdraw(uint256 amount, string memory reason) external {
        require(msg.sender==toAddress,"this stream is not for you");
        uint256 totalAmountCanWithdraw = streamBalance();
        require(totalAmountCanWithdraw>=amount,"not enough in the stream");
@@ -41,13 +44,12 @@ contract SimpleStream {
        }
        last = last + ((block.timestamp - last) * amount / totalAmountCanWithdraw);
        emit Withdraw( msg.sender, amount, reason );
-       toAddress.transfer(amount);
+       require(gtc.transfer(msg.sender, amount), "Transfer failed");
+
    }
 
-   function streamDeposit(string memory reason) public payable {
-      require(msg.value>=cap/10,"Not big enough, sorry.");
-      emit Deposit( msg.sender, msg.value, reason );
+   function streamDeposit(string memory reason, uint value) external {
+      require(value>=cap/10,"Not big enough, sorry.");
+      emit Deposit( msg.sender, value, reason );
     }
-
-   receive() external payable { streamDeposit(""); }
 }
