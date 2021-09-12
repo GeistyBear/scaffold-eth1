@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
+import RaidPixels from "./assets/raid_pixel.png";
 import { QRPunkBlockie, AddressInput, EtherInput, Balance, Account, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
@@ -32,6 +33,7 @@ import { useContractConfig, useLocalStorage } from "./hooks"
 import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
 import Authereum from "authereum";
+import { convertLegacyProps } from "antd/lib/button/button";
 
 const { ethers } = require("ethers");
 /*
@@ -475,7 +477,14 @@ function App(props) {
 
 
   return (
-    <div className="App">
+    <div className="App"
+    style={{
+      backgroundImage: 'url(' + '/clouds.png' + ')',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center top',
+      backgroundRepeat: 'repeat',
+    }}>
+      
       {/* ✏️ Edit the header and change the title to your project name */}
       <Header />
       <div style={{padding:8}}>
@@ -555,8 +564,16 @@ function App(props) {
             */}
 
 
-            <div style={{ position: "relative", color:"#ff3864", width: 420, margin: "auto", textAlign: "center", marginTop: 32, fontSize:32 }}>
-              ⚔️ <Balance value={raidBalance} size={38}/> RAID
+            <div style={{ position: "relative", color:"#ff3864", width: '100%', marginTop: 32, marginBottom: 32, fontSize: 32, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{marginTop: '4px'}}>
+                <img src={RaidPixels} width="28px" height="28px"/>
+                </span>
+                <div>
+                  <Balance value={raidBalance} size={38}/>
+                </div>
+                <span style={{marginTop: '12px'}}>{' '}
+                RAID
+                </span>
             </div>
 
             <div style={{ padding: 8, cursor: "pointer", backgroundColor: "#FFFFFF", width: 338, margin: "auto" }}>

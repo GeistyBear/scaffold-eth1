@@ -78,7 +78,7 @@ export default function EtherInput(props) {
 
   return (
     <Input
-      placeholder={props.placeholder ? props.placeholder : "amount in " + mode}
+      placeholder={props.placeholder ? props.placeholder : "Amount of " + mode}
       autoFocus={props.autoFocus}
       prefix={prefix}
       value={display}
