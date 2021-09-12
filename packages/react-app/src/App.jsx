@@ -8,7 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
-import { AddressInput, EtherInput, Balance, Account, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
+import { QRPunkBlockie, AddressInput, EtherInput, Balance, Account, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
@@ -70,8 +70,8 @@ if (DEBUG) console.log("📡 Connecting to Mainnet Ethereum");
 const scaffoldEthProvider = navigator.onLine
   ? new ethers.providers.StaticJsonRpcProvider("https://rpc.scaffoldeth.io:48544")
   : null;
-const poktMainnetProvider = navigator.onLine ? new ethers.providers.StaticJsonRpcProvider("https://eth-mainnet.gateway.pokt.network/v1/lb/611156b4a585a20035148406") : null;
-const mainnetInfura = navigator.onLine
+const poktMainnetProvider = null//navigator.onLine ? new ethers.providers.StaticJsonRpcProvider("https://eth-mainnet.gateway.pokt.network/v1/lb/611156b4a585a20035148406") : null;
+const mainnetInfura = null//navigator.onLine
   ? new ethers.providers.StaticJsonRpcProvider("https://mainnet.infura.io/v3/" + INFURA_ID)
   : null;
 // ( ⚠️ Getting "failed to meet quorum" errors? Check your INFURA_ID
@@ -546,6 +546,11 @@ function App(props) {
 
             ⚔️ <Balance value={raidBalance} size={38}/> RAID
             </div>
+
+            <div style={{ padding: 8, cursor: "pointer", backgroundColor: "#44444", width: 340, margin: "auto" }}>
+              <QRPunkBlockie withQr address={address} url={"https://raid.surge.sh/"} />
+            </div>
+
 
 
             <div style={{ position: "relative", width: 320, margin: "auto", textAlign: "center", marginTop: 32 }}>

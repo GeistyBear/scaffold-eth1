@@ -4,6 +4,7 @@ import { useLookupAddress } from "eth-hooks/dapps/ens";
 import React, { useCallback, useState } from "react";
 import QrReader from "react-qr-reader";
 import Blockie from "./Blockie";
+import { QRPunkBlockie } from ".";
 
 // probably we need to change value={toAddress} to address={toAddress}
 
@@ -122,6 +123,9 @@ export default function AddressInput(props) {
 
   return (
     <div>
+      <div style={{ position: "absolute", left: -197, top: -74 }}>
+        {currentValue && currentValue.length > 41 ? <QRPunkBlockie scale={0.6} address={currentValue} /> : ""}
+      </div>
       {scanner}
       <Input
         id="0xAddress" // name it something other than address for auto fill doxxing
