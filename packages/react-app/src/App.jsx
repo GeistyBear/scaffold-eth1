@@ -376,7 +376,7 @@ function App(props) {
     }
   } else {
     networkDisplay = (
-      <div style={{ zIndex: -1, position: "absolute", right: 154, top: 28, padding: 16, color: targetNetwork.color }}>
+      <div style={{ zIndex: -1,opacity:0.7,marginTop:-16,marginLeft:32, color: targetNetwork.color }}>
         {targetNetwork.name}
       </div>
     );
@@ -478,6 +478,19 @@ function App(props) {
     <div className="App">
       {/* ✏️ Edit the header and change the title to your project name */}
       <Header />
+      <div style={{padding:8}}>
+        <Account
+          address={address}
+          localProvider={localProvider}
+          userSigner={userSigner}
+          mainnetProvider={mainnetProvider}
+          price={price}
+          web3Modal={web3Modal}
+          loadWeb3Modal={loadWeb3Modal}
+          logoutOfWeb3Modal={logoutOfWeb3Modal}
+          blockExplorer={blockExplorer}
+        />
+      </div>
       {networkDisplay}
       <BrowserRouter>
         {/*<Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
@@ -543,22 +556,19 @@ function App(props) {
 
 
             <div style={{ position: "relative", width: 420, margin: "auto", textAlign: "center", marginTop: 32, fontSize:32 }}>
-
-            ⚔️ <Balance value={raidBalance} size={38}/> RAID
+              ⚔️ <Balance value={raidBalance} size={38}/> RAID
             </div>
 
-            <div style={{ padding: 8, cursor: "pointer", backgroundColor: "#44444", width: 340, margin: "auto" }}>
+            <div style={{ padding: 8, cursor: "pointer", backgroundColor: "#FFFFFF", width: 338, margin: "auto" }}>
               <QRPunkBlockie withQr address={address} url={"https://raid.surge.sh/"} />
             </div>
-
-
 
             <div style={{ position: "relative", width: 320, margin: "auto", textAlign: "center", marginTop: 32 }}>
               <div style={{ padding: 10 }}>
                 <AddressInput
                   ensProvider={mainnetProvider}
                   placeholder="to address"
-                  address={toAddress}
+                  //address={toAddress}
                   onChange={setToAddress}
                   hoistScanner={toggle => {
                     scanner = toggle;
@@ -626,17 +636,7 @@ function App(props) {
 
       {/* <ThemeSwitch /> 👨‍💼 Your account is in the top right with a wallet at connect options */}
       <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
-        <Account
-          address={address}
-          localProvider={localProvider}
-          userSigner={userSigner}
-          mainnetProvider={mainnetProvider}
-          price={price}
-          web3Modal={web3Modal}
-          loadWeb3Modal={loadWeb3Modal}
-          logoutOfWeb3Modal={logoutOfWeb3Modal}
-          blockExplorer={blockExplorer}
-        />
+
         {faucetHint}
       </div>
 

@@ -44,8 +44,12 @@ export default function AddressInput(props) {
     <div
       style={{ marginTop: 4, cursor: "pointer" }}
       onClick={() => {
-        setScan(!scan);
+        setScan(true);
       }}
+      onTouchStart={() => {
+        setScan(true);
+      }}
+
     >
       <Badge count={<CameraOutlined style={{ fontSize: 9 }} />}>
         <QrcodeOutlined style={{ fontSize: 18 }} />
@@ -85,10 +89,10 @@ export default function AddressInput(props) {
   const scanner = scan ? (
     <div
       style={{
-        zIndex: 256,
+        zIndex: 1023,
         position: "absolute",
         left: 0,
-        top: 0,
+        top: -150,
         width: "100%",
       }}
       onClick={() => {

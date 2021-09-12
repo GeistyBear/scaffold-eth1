@@ -5,12 +5,6 @@ import React from "react";
 
 export default function Header() {
   return (
-    <a href="https://github.com/austintgriffith/scaffold-eth" target="_blank" rel="noopener noreferrer">
-      <PageHeader
-        title="⚔️ RAID burner wallet 🔥"
-        subTitle=""
-        style={{ cursor: "pointer" }}
-      />
-    </a>
+    <></>
   );
 }
