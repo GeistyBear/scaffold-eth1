@@ -3,10 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { message, Row, Col, Button, List, Divider, Input, Card, DatePicker, Slider, Switch, Progress, Spin } from "antd";
 import { ConsoleSqlOutlined, SyncOutlined } from '@ant-design/icons';
-import { QRPunkBlockie, QRBlockie, EtherInput, Address, Balance } from "../components";
+import { QRPunkBlockie, QRBlockie, EtherInput, Address, Balance, GtcBalance } from "../components";
 import { parseEther, formatEther } from "@ethersproject/units";
 import { GTC_ADDRESS, DAI_ABI } from "../constants";
 import { useExternalContractLoader } from '../hooks'
+import axios from "axios";
 
 import pretty from 'pretty-time';
 
@@ -43,6 +44,20 @@ export default function ExampleUI({streamToAddress, streamfrequency, totalStream
 
   const totalUnclaimable = totalStreamBalance && streamBalance && totalStreamBalance.sub(streamBalance)
 
+  let quoteRate = 0;
+  axios
+  .get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=gitcoin")
+  .then(response => {
+    if (response && response.data[0] && response.data[0].current_price) {
+      quoteRate = response.data[0].current_price
+
+    }
+  })
+  console.log("UOTE", quoteRate)
+  // console.log("WWUOTE", formatEther(streamBalance).toString())
+
+  // const quote = quoteRate * formatEther(streamBalance)
+  
   //const unclaimedPercent = totalStreamBalance && totalUnclaimable && totalUnclaimable.mul(100).div(totalStreamBalance)
   //console.log("unclaimedPercent",unclaimedPercent,unclaimedPercent&&unclaimedPercent.toNumber())
 
@@ -109,7 +124,7 @@ export default function ExampleUI({streamToAddress, streamfrequency, totalStream
         {/*<h4>stream balance: {streamBalance && formatEther(streamBalance)}</h4>*/}
 
         <Progress strokeLinecap="square" type="dashboard" percent={percent} format={()=>{
-          return <Balance price={price} value={streamBalance} size={18}/>
+          return quoteRate
         }} />
 
         <Divider/>

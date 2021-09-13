@@ -18,3 +18,4 @@ export { default as QRPunkBlockie } from "./QRPunkBlockie";
 export { default as Timeline } from "./Timeline";
 export { default as TokenBalance } from "./TokenBalance";
 export { default as Wallet } from "./Wallet";
+export { default as GtcBalance } from "./GtcBalance";
