@@ -90,10 +90,9 @@ Further on as user lock in eth in a particular emoji token contract they wish to
 
 Firstly, get us some funds using local faucet.
 
-<img width="458" alt="feast 1" src="https://user-images.githubusercontent.com/26670962/132893454-5775c6b4-ad87-46c9-af92-d4b7f9541355.png">
+<img width="1663" alt="Screenshot 2021-09-13 at 11 04 29 PM" src="https://user-images.githubusercontent.com/26670962/133130563-0991e3f3-ed60-4a29-8aad-78a4e1f8fbed.png">
 
-
-Mint & Burn Different Emoji's
+Mint & Burn Different Emoji's and observe the leaderboard to see the trending emoji's!
 
 
 ## Contact
