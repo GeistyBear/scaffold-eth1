@@ -78,10 +78,6 @@ During the deployment when the 6 emoji contract's get deployed there is small 0.
 
 Further on as user lock in eth in a particular emoji token contract they wish to mint and the price increases with the supply and vice-versa if the user burns the token.
 
-## To-Do
-- Beautufy the design, right now the ui code in terms of styling is pretty simple and un-appealing the aim is get the design right in terms of the factors mentioned above
-
-- React code for leaderboard, need to sort the [emojiQuoteArray](https://github.com/scaffold-eth/scaffold-eth/blob/bonding-curve-emoji-feast/packages/react-app/src/views/ExampleUI.jsx#L78) with each object having different keys.
 
 
 
