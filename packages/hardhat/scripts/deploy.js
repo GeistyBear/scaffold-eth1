@@ -12,8 +12,8 @@ const main = async () => {
   const mockGtc = await deploy("MockGtc")
 
   const simpleStream = await deploy("SimpleStream",[
-    /* to address */ "0x2DdA8dc2f67f1eB94b250CaEFAc9De16f70c5A51",
-    /* cap */ utils.parseEther("0.5"),//ether
+    /* to address */ "0x1e2Ce012b27d0c0d3e717e943EF6e62717CEc4ea",
+    /* cap */ utils.parseEther("50"),//ether
     /* frequency */120, //1296000,//seconds //1296000,//15 days
     /* starts full: */ false,
     mockGtc.address

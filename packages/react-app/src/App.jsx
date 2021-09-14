@@ -36,7 +36,8 @@ import { INFURA_ID, DAI_ADDRESS, DAI_ABI, NETWORK, NETWORKS } from "./constants"
 
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS['ropsten']; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const network = 'ropsten';
+const targetNetwork = NETWORKS[network]; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true
@@ -68,6 +69,7 @@ const blockExplorer = targetNetwork.blockExplorer;
 function App(props) {
 
   const mainnetProvider = (scaffoldEthProvider && scaffoldEthProvider._network) ? scaffoldEthProvider : mainnetInfura
+  const ropstenProvider = new StaticJsonRpcProvider("https://ropsten.infura.io/v3/" + INFURA_ID);
 
   const [injectedProvider, setInjectedProvider] = useState();
   /* 💵 This hook will get the price of ETH from 🦄 Uniswap: */
@@ -284,7 +286,7 @@ function App(props) {
 
               address={address}
               userProvider={userProvider}
-              mainnetProvider={mainnetProvider}
+              mainnetProvider={network === 'ropsten' ? ropstenProvider : mainnetProvider}
               localProvider={localProvider}
               yourLocalBalance={yourLocalBalance}
               price={price}

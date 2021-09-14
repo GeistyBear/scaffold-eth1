@@ -6,11 +6,11 @@ import React, { useEffect, useState } from "react";
 /*
   ~ What it does? ~
 
-  Displays input field for ETH/USD amount, with an option to convert between ETH and USD
+  Displays input field for GTC/USD amount, with an option to convert between GTC and USD
 
   ~ How can I use? ~
 
-  <EtherInput
+  <GTCerInput
     autofocus
     mode={"USD"}
     price={price}
@@ -23,14 +23,14 @@ import React, { useEffect, useState } from "react";
 
   ~ Features ~
 
-  - Provide price={price} of ether and easily convert between USD and ETH
-  - Provide value={value} to specify initial amount of ether
+  - Provide price={price} of GTCer and easily convert between USD and GTC
+  - Provide value={value} to specify initial amount of GTCer
   - Provide placeholder="Enter amount" value for the input
   - Control input change by onChange={value => { setAmount(value);}}
 */
 
-export default function EtherInput(props) {
-  const [mode, setMode] = useState( props.mode || (props.price ? "USD" : "ETH"));
+export default function GTCerInput(props) {
+  const [mode, setMode] = useState(props.mode || (props.price ? "USD" : "GTC"));
   const [display, setDisplay] = useState();
   const [value, setValue] = useState();
 
@@ -43,7 +43,7 @@ export default function EtherInput(props) {
         style={{ cursor: "pointer" }}
         onClick={() => {
           if (mode === "USD") {
-            setMode("ETH");
+            setMode("GTC");
             setDisplay(currentValue);
           } else {
             setMode("USD");
@@ -68,7 +68,7 @@ export default function EtherInput(props) {
     addonAfter = option("USD 🔀");
   } else {
     prefix = "Ξ";
-    addonAfter = option("ETH 🔀");
+    addonAfter = option("GTC 🔀");
   }
 
   useEffect(() => {
@@ -77,11 +77,9 @@ export default function EtherInput(props) {
     }
   }, [currentValue]);
 
-  useEffect(
-    ()=>{
-      setValue(props.value)
-    }
-  ,[props.value])
+  useEffect(() => {
+    setValue(props.value);
+  }, [props.value]);
 
   return (
     <Input
@@ -93,12 +91,12 @@ export default function EtherInput(props) {
       onChange={async e => {
         const newValue = e.target.value;
         if (mode === "USD") {
-          const possibleNewValue = parseFloat(newValue)
-          if(possibleNewValue){
-            const ethValue = parseFloat(possibleNewValue / props.price).toFixed(15);
-            setValue(ethValue);
+          const possibleNewValue = parseFloat(newValue);
+          if (possibleNewValue) {
+            const GTCValue = parseFloat(possibleNewValue / props.price).toFixed(15);
+            setValue(GTCValue);
             if (typeof props.onChange === "function") {
-              props.onChange(ethValue);
+              props.onChange(GTCValue);
             }
             setDisplay(newValue);
           } else {

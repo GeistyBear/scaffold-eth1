@@ -58,6 +58,8 @@ export default function Balance(props) {
 
   if (price && dollarMode) {
     displayBalance = "$" + (floatBalance * price).toFixed(2);
+  } else {
+    displayBalance = "GTC " + displayBalance;
   }
 
   return (
