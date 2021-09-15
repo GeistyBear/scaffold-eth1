@@ -1,8 +1,10 @@
-# 🏗 scaffold-eth - ⏳ Simple Stream
+# 🏗 scaffold-eth - ⏳ Simple Stream GTC
 
-> a simple ETH stream where the beneficiary reports work via links when they withdraw
+> a simple GTC stream where the beneficiary reports work via links when they withdraw
 
 > anyone can deposit funds into the stream and provide guidance too
+
+> currently the branch has been tested on ropsten so a Mock GTC Contract needs to be deployed but for mainnet we will use the external Contract hook to execute gtc related transactions
 
 ---
 
@@ -10,11 +12,10 @@ required: [Node](https://nodejs.org/dist/latest-v12.x/) plus [Yarn](https://clas
 
 
 ```bash
-git clone https://github.com/austintgriffith/scaffold-eth.git simple-stream
+git clone -b simple-stream-gtc https://github.com/austintgriffith/scaffold-eth.git simple-stream-gtc
 
-cd simple-stream
+cd simple-stream-gtc 
 
-git checkout simple-stream
 ```
 
 ```bash
@@ -25,7 +26,7 @@ yarn install
 
 ```bash
 
-yarn start
+yarn deploy
 
 ```
 
@@ -33,19 +34,10 @@ yarn start
 
 ```bash
 cd scaffold-eth
-yarn chain
+yarn start
 
 ```
 
-
-
-> in a third terminal window:
-
-```bash
-cd scaffold-eth
-yarn deploy
-
-```
 ---
 
 💼 Edit your **toAddress**, **cap**, **frequency**, and other stream parameters in `deploy.js` in `packages/hardhat/scripts`
@@ -62,39 +54,37 @@ yarn deploy
 
 ---
 
-
-![image](https://user-images.githubusercontent.com/2653167/117220266-1ad08300-adc4-11eb-9f14-cd794b018299.png)
-
+<img width="719" alt="stream_new_1" src="https://user-images.githubusercontent.com/26670962/133470726-9e9dfb32-567d-4709-8cb0-a06b27b38cf5.png">
 
 ---
 
 > Set the stream **toAddress** in `deploy.js` to your address in the frontend:
 
-![image](https://user-images.githubusercontent.com/2653167/117186936-9c122080-ad98-11eb-9fd6-5e951c3c39d9.png)
+```
+  const mockGtc = await deploy("MockGtc")
 
-Normally you will want to configure your **frequency** to be much longer, but it starts at *two minutes* for local testing.
+  const simpleStream = await deploy("SimpleStream",[
+    /* to address */ "0x1e2Ce012b27d0c0d3e717e943EF6e62717CEc4ea",
+    /* cap */ utils.parseEther("50"),//gtc
+    /* frequency */120, //1296000,//seconds //1296000,//15 days
+    /* starts full: */ false,
+    mockGtc.address
+  ]/*,{nonce: 0}*/)
+```
 
-> ⚠️ Make sure you have `deploy.js` edited so it is streaming to **your** frontend account:
-
-![image](https://user-images.githubusercontent.com/2653167/117215801-fec8e380-adbb-11eb-89f8-bca3477652c1.png)
-
----
-
-Notice in the 'deploy.js' we automatically send **2 ETH** to the contract:
-
-![image](https://user-images.githubusercontent.com/2653167/117216414-f45b1980-adbc-11eb-8d39-9257057f2d31.png)
-
-That means it has enough to pay out **0.5 ETH** 4 times over an **8 minute period**:
-
-![image](https://user-images.githubusercontent.com/2653167/117217614-e3aba300-adbe-11eb-85f2-de92f3dd4ebc.png)
-
+Normally you will want to configure your **frequency** to be much longer, but it starts at *two minutes* for local testing and as mentioned above for mainnet we will just hardcode the gtc address in the contract rather than passing it in the constructor.
 
 ---
 
-The stream will start *empty* and flow at a rate of **0.5 ETH** every **two minutes**:
+That means it has enough to pay out **about 471 USD worth of GTC** 4 times over an **8 minute period**:
 
+<img width="367" alt="stream-crop" src="https://user-images.githubusercontent.com/26670962/133470787-22ea65bd-5cd1-4f03-87f7-6a0b4036a0fe.png">
 
-![faucetstream mov](https://user-images.githubusercontent.com/2653167/117219039-ad235780-adc1-11eb-9f16-828fb00076fb.gif)
+---
+
+The stream will start *empty* and flow at a rate of **471 USD worth of GTC** every **two minutes**:
+
+<img width="719" alt="stream_new_1" src="https://user-images.githubusercontent.com/26670962/133470726-9e9dfb32-567d-4709-8cb0-a06b27b38cf5.png">
 
 > ⚠️ Since your local node only mines a block when you send a transaction, you might want to send yourself funds from the faucet to see the stream fill up:
 
@@ -102,23 +92,19 @@ The stream will start *empty* and flow at a rate of **0.5 ETH** every **two minu
 
 > Withdraw from your stream by posting a github link and an amount:
 
-![streamwithdraw mov](https://user-images.githubusercontent.com/2653167/117219080-bdd3cd80-adc1-11eb-9cb9-5fa2d1005337.gif)
+<img width="719" alt="stream_new_1" src="https://user-images.githubusercontent.com/26670962/133470726-9e9dfb32-567d-4709-8cb0-a06b27b38cf5.png">
 
 ---
 
 A work log will form, tracking your progress:
 
-![image](https://user-images.githubusercontent.com/2653167/117219794-3b4c0d80-adc3-11eb-86b4-83961ceeddf2.png)
-
+<img width="681" alt="event-1" src="https://user-images.githubusercontent.com/26670962/133470885-c337074d-96e0-4721-a608-68565f6f2ab3.png">
 
 ---
 
 An initial deposit occurs in the `deploy.js` but you can also depoit using the frontend:
 
-![image](https://user-images.githubusercontent.com/2653167/117219949-8a923e00-adc3-11eb-8455-e1d4bc5bc829.png)
-
-
-> ⚠️ You can give yourself $1,000,000 in local ETH using the faucet wallet icon (bottom left)
+<img width="722" alt="event-2" src="https://user-images.githubusercontent.com/26670962/133470938-411874df-8f0d-4f05-bf27-dd5cc330366a.png">
 
 
 ---
