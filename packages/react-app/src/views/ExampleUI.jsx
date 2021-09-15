@@ -59,7 +59,7 @@ export default function ExampleUI({
 
   if (myMainnetGTCBalance) console.log("my mainnet gtc balance", formatEther(myMainnetGTCBalance));
 
-  const streamNetPercentSeconds = totalStreamBalance && streamCap && totalStreamBalance.mul(100).div(streamCap);
+  const streamNetPercentSeconds = myMainnetGTCBalance && streamCap && myMainnetGTCBalance.mul(100).div(streamCap);
 
   console.log(
     "streamNetPercentSeconds",
@@ -70,6 +70,7 @@ export default function ExampleUI({
   const totalSeconds = streamNetPercentSeconds && streamfrequency && streamNetPercentSeconds.mul(streamfrequency);
   console.log("totalSeconds", totalSeconds);
 
+  console.log("numberOfTimesFull", streamNetPercentSeconds);
   const numberOfTimesFull = streamNetPercentSeconds && Math.floor(streamNetPercentSeconds.div(100));
 
   const streamNetPercent = streamNetPercentSeconds && streamNetPercentSeconds.mod(100);
@@ -77,8 +78,6 @@ export default function ExampleUI({
 
   const remainder = streamNetPercent && streamNetPercent.mod(1);
   console.log("remainder", remainder, remainder && remainder.toNumber());
-
-  const totalUnclaimable = totalStreamBalance && streamBalance && totalStreamBalance.sub(streamBalance);
 
   const [quoteRate, setQuoteRate] = useState(0);
 
