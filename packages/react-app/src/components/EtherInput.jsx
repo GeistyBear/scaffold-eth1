@@ -100,7 +100,10 @@ export default function GTCerInput(props) {
             }
             setDisplay(newValue);
           } else {
-            setDisplay(newValue);
+            if (typeof props.onChange === "function") {
+              props.onChange();
+            }
+            setDisplay();
           }
         } else {
           setValue(newValue);

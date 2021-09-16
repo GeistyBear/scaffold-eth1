@@ -5,18 +5,21 @@ const { config, ethers, tenderly, run } = require("hardhat");
 const { utils } = require("ethers");
 const R = require("ramda");
 
+const GTC_ADDRESS = "0xde30da39c46104798bb5aa3fe8b9e0e1f348163f";
+const ROPSTEN_DAI_ADDRESS = "0xad6d458402f60fd3bd25163575031acdce07538d";
+
 const main = async () => {
 
   console.log("\n\n 📡 Deploying...\n");
 
-  const mockGtc = await deploy("MockGtc")
+  // const mockGtc = await deploy("MockGtc")
 
   const simpleStream = await deploy("SimpleStream",[
     /* to address */ "0x1e2Ce012b27d0c0d3e717e943EF6e62717CEc4ea",
     /* cap */ utils.parseEther("50"),//ether
     /* frequency */120, //1296000,//seconds //1296000,//15 days
     /* starts full: */ false,
-    mockGtc.address
+    config.defaultNetwork === "ropsten" ? ROPSTEN_DAI_ADDRESS : GTC_ADDRESS
   ]/*,{nonce: 0}*/)
 
   // add some local funds to the stream with a little message:

@@ -20,8 +20,9 @@ import { ConsoleSqlOutlined, SyncOutlined } from "@ant-design/icons";
 import { parseEther, formatEther } from "@ethersproject/units";
 import axios from "axios";
 import pretty from "pretty-time";
+import { Contract } from "ethers";
 import { QRPunkBlockie, QRBlockie, EtherInput, Address, Balance, GtcBalance } from "../components";
-import { GTC_ADDRESS, DAI_ABI } from "../constants";
+import { DAI_ABI } from "../constants";
 import { useExternalContractLoader, useContractReader } from "../hooks";
 
 export default function ExampleUI({
@@ -41,21 +42,33 @@ export default function ExampleUI({
   tx,
   readContracts,
   writeContracts,
+  gtcAddress,
 }) {
   const [amount, setAmount] = useState();
   const [reason, setReason] = useState();
 
   const [depositAmount, setDepositAmount] = useState();
   const [depositReason, setDepositReason] = useState();
+  const gtcContract = new Contract(gtcAddress, DAI_ABI, userProvider.getSigner());
 
   console.log("streamCap", streamCap);
   console.log("streamBalance", streamBalance);
   const percent = streamCap && streamBalance && streamBalance.mul(100).div(streamCap).toNumber();
 
-  const mainnetGTCContract = useExternalContractLoader(mainnetProvider, GTC_ADDRESS, DAI_ABI);
-  const myMainnetGTCBalance = useContractReader({ GTC: mainnetGTCContract }, "GTC", "balanceOf", [
+  const mainnetGTCContract = useExternalContractLoader(mainnetProvider, gtcAddress, DAI_ABI);
+  const myMainnetGTCBalance = useContractReader(
+    { GTC: mainnetGTCContract },
+    "GTC",
+    "balanceOf",
+    [readContracts && readContracts.SimpleStream.address],
+    1000,
+  );
+  const gtcAllowance = useContractReader({ GTC: mainnetGTCContract }, "GTC", "allowance", [
+    address,
     readContracts && readContracts.SimpleStream.address,
   ]);
+
+  if (gtcAllowance) console.log("gtcAllowance", gtcAllowance, formatEther(gtcAllowance));
 
   if (myMainnetGTCBalance) console.log("my mainnet gtc balance", formatEther(myMainnetGTCBalance));
 
@@ -117,6 +130,21 @@ export default function ExampleUI({
     );
   }
 
+  const isAllowanceRequired = gtcAllowance && depositAmount && gtcAllowance.lt(parseEther(depositAmount.toString()));
+
+  const handleSubmitButton = () => {
+    if (isAllowanceRequired) {
+      console.log(Object.keys(mainnetGTCContract));
+      tx(gtcContract.approve(readContracts.SimpleStream.address, parseEther(depositAmount.toString())));
+    } else {
+      console.log("allowed?", depositAmount, gtcAllowance.lt(parseEther(depositAmount.toString())), address);
+      // tx(gtcContract.streamDeposit(depositReason, parseEther(depositAmount.toString())));
+      tx(writeContracts.SimpleStream.streamDeposit(depositReason, parseEther(depositAmount.toString())));
+      setDepositAmount();
+      setDepositReason();
+    }
+  };
+
   return (
     <div>
       {/*
@@ -131,16 +159,18 @@ export default function ExampleUI({
       <div style={{ padding: 16, width: WIDTH, margin: "auto" }}>
         <div style={{ padding: 32 }}>
           <div style={{ padding: 32 }}>
-            <Balance value={myMainnetGTCBalance} price={quoteRate} />
+            <Balance value={myMainnetGTCBalance} price={quoteRate} ticker="GTC" />
             <span style={{ opacity: 0.5 }}>
               {" "}
-              @ <Balance value={streamCap} price={quoteRate} /> /{" "}
+              @ <Balance value={streamCap} price={quoteRate} ticker="GTC" /> /{" "}
               {streamfrequency && pretty(streamfrequency.toNumber() * 1000000000)}
             </span>
           </div>
-          <div>
-            {totalProgress} ({totalSeconds && pretty(totalSeconds.toNumber() * 10000000)})
-          </div>
+          {totalProgress.length > 0 ? (
+            <div>
+              {totalProgress} ({totalSeconds && pretty(totalSeconds.toNumber() * 10000000)})
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -166,7 +196,7 @@ export default function ExampleUI({
           type="dashboard"
           percent={percent}
           format={() => {
-            return <Balance price={quoteRate} value={streamBalance} size={18} />;
+            return <Balance price={quoteRate} value={streamBalance} size={18} ticker="GTC" />;
           }}
         />
 
@@ -220,7 +250,7 @@ export default function ExampleUI({
           renderItem={item => {
             return (
               <List.Item key={item.blockNumber + "_" + item.to}>
-                <Balance value={item.amount} price={quoteRate} />
+                <Balance value={item.amount} price={quoteRate} ticker="GTC" />
                 <span style={{ fontSize: 14 }}>
                   <span style={{ padding: 4 }}>{item.reason}</span>
                   <Address minimized address={item.to} />
@@ -239,7 +269,7 @@ export default function ExampleUI({
           renderItem={item => {
             return (
               <List.Item key={item.blockNumber + "_" + item.from}>
-                <Balance value={item.amount} price={quoteRate} />
+                <Balance value={item.amount} price={quoteRate} ticker="GTC" />
                 <span style={{ fontSize: 14 }}>
                   <span style={{ padding: 4 }}>{item.reason}</span>
                   <Address minimized address={item.from} />
@@ -258,29 +288,18 @@ export default function ExampleUI({
           }}
         />
         <EtherInput
-          mode="USD"
+          mode="GTC"
           autofocus
           price={quoteRate}
           value={depositAmount}
           placeholder="Deposit amount"
           onChange={value => {
+            console.log("deposit amount", value);
             setDepositAmount(value);
           }}
         />
-        <Button
-          style={{ marginTop: 8 }}
-          onClick={() => {
-            // tx( writeContracts.mainnetGTCContract.transfer(writeContracts.SimpleStream.address, amount))
-            tx(writeContracts.MockGtc.transfer(writeContracts.SimpleStream.address, parseEther("" + depositAmount)));
-            setTimeout(() => {
-              console.log("second tx fired 15s later....");
-              tx(writeContracts.SimpleStream.streamDeposit(depositReason, parseEther("" + depositAmount)));
-            }, 15000);
-            setDepositReason();
-            setDepositAmount();
-          }}
-        >
-          Deposit
+        <Button disabled={!depositAmount} style={{ marginTop: 8 }} onClick={handleSubmitButton}>
+          {isAllowanceRequired ? "Allow to spend" : "Deposit"}
         </Button>
       </div>
 

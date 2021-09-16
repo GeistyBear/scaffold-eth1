@@ -11,8 +11,8 @@ export const BLOCKNATIVE_DAPPID = "0b58206a-f3c0-4701-a62f-73c7243e8c77";
 
 export const DAI_ADDRESS = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
 
-// export const GTC_ADDRESS = "0xde30da39c46104798bb5aa3fe8b9e0e1f348163f";
-export const GTC_ADDRESS = "0x95Ed19cF0f816d27a29ceEa7c3B2F3837BAdeD9d";
+export const GTC_ADDRESS = "0xde30da39c46104798bb5aa3fe8b9e0e1f348163f";
+export const ROPSTEN_DAI_ADDRESS = "0xad6d458402f60fd3bd25163575031acdce07538d";
 
 export const DAI_ABI = [
   {

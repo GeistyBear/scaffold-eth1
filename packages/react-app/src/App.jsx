@@ -14,7 +14,7 @@ import { formatEther, parseEther } from "@ethersproject/units";
 //import Hints from "./Hints";
 import { Hints, ExampleUI, Subgraph } from "./views"
 import { useThemeSwitcher } from "react-css-theme-switcher";
-import { INFURA_ID, DAI_ADDRESS, DAI_ABI, NETWORK, NETWORKS } from "./constants";
+import { INFURA_ID, DAI_ADDRESS, DAI_ABI, NETWORK, NETWORKS, GTC_ADDRESS, ROPSTEN_DAI_ADDRESS } from "./constants";
 /*
     Welcome to 🏗 scaffold-eth !
 
@@ -38,6 +38,7 @@ import { INFURA_ID, DAI_ADDRESS, DAI_ABI, NETWORK, NETWORKS } from "./constants"
 /// 📡 What chain are your contracts deployed to?
 const network = 'ropsten';
 const targetNetwork = NETWORKS[network]; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const gtcAddress = (network === 'ropsten' ? ROPSTEN_DAI_ADDRESS : GTC_ADDRESS);
 
 // 😬 Sorry for all the console logging
 const DEBUG = true
@@ -293,6 +294,7 @@ function App(props) {
               tx={tx}
               writeContracts={writeContracts}
               readContracts={readContracts}
+              gtcAddress={gtcAddress}
             />
 
           </Route>
